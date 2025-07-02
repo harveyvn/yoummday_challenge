@@ -1,0 +1,26 @@
+version: '3.8'
+
+networks:
+  harvey-cloud:
+    external: true  # Same external network
+
+services:
+  metabase:
+    image: metabase/metabase:v0.55.6
+    container_name: listen_brainz_metabase_container
+
+    ports:
+      - "3000:3000"
+
+    env_file:
+      - .encrypted_env
+
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+    networks:
+      - harvey-cloud
+
+volumes:
+  db_data:
+    driver: local
