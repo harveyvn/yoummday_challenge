@@ -1,6 +1,7 @@
 from minio import Minio
 from minio.error import S3Error
 import os
+from utils.logging import log
 
 
 def upload_file_to_minio(local_file_path, bucket_name, object_name):
@@ -16,16 +17,16 @@ def upload_file_to_minio(local_file_path, bucket_name, object_name):
     found = client.bucket_exists(bucket_name)
     if not found:
         client.make_bucket(bucket_name)
-        print(f"Bucket '{bucket_name}' created.")
+        log.info(f"Bucket '{bucket_name}' created.")
     else:
-        print(f"Bucket '{bucket_name}' already exists.")
+        log.info(f"Bucket '{bucket_name}' already exists.")
 
     # Upload the file
     try:
         client.fput_object(bucket_name, object_name, local_file_path)
-        print(f"File '{local_file_path}' uploaded as '{object_name}' in bucket '{bucket_name}'.")
+        log.info(f"File '{local_file_path}' uploaded as '{object_name}' in bucket '{bucket_name}'.")
     except S3Error as err:
-        print(f"Failed to upload: {err}")
+        log.info(f"Failed to upload: {err}")
 
 
 if __name__ == "__main__":
