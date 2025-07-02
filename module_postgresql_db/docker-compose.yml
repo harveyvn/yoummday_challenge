@@ -1,0 +1,35 @@
+version: '3.8'
+
+networks:
+  harvey-cloud:
+    external: true
+
+services:
+  db:
+    image: postgres:15
+    container_name: listen_brainz_db_container
+
+    ports:
+      - "5432:5432"
+
+    env_file:
+      - .encrypted_env
+
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d listen_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+    restart: unless-stopped
+
+    networks:
+      - harvey-cloud
+
+volumes:
+  db_data:
+    driver: local
