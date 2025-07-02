@@ -1,8 +1,9 @@
+import os
 from pyspark.sql import SparkSession
 
 
 def main():
-    master_url = "spark://spark-master:7077"
+    master_url = os.getenv("SPARK_MASTER_URL", "local[*]")
     app_name = "HelloWorld"
 
     # Initialize SparkSession
