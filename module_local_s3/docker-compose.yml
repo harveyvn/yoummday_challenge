@@ -1,0 +1,29 @@
+version: '3.8'
+
+networks:
+  harvey-cloud:
+    external: true
+
+services:
+  minio:
+    image: minio/minio:RELEASE.2025-04-08T15-41-24Z
+    container_name: listen_brainz_s3_container
+
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+    env_file:
+      - .encrypted_env
+
+    command: server /data --console-address ":9001"
+
+    volumes:
+      - minio-data:/data
+
+    networks:
+      - harvey-cloud
+
+volumes:
+  minio-data:
+    driver: local
