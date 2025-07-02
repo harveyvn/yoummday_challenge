@@ -1,0 +1,46 @@
+version: '3.8'
+
+networks:
+  harvey-cloud:
+    external: true
+
+services:
+  spark-master:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: listen_brainz_spark_master
+
+    environment:
+      - SPARK_MODE=master
+
+    env_file:
+      - .encrypted_env
+
+    ports:
+      - '8088:8080'
+      - '7077:7077'
+
+    networks:
+      - harvey-cloud
+
+  spark-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: listen_brainz_spark_worker
+
+    depends_on:
+      - spark-master
+
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+
+    env_file:
+      - .encrypted_env
+
+    networks:
+      - harvey-cloud
