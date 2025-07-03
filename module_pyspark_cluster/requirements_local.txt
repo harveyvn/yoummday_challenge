@@ -2,4 +2,4 @@ pandas==2.3.0
 numpy==1.26.3
 minio==7.2.15
 cloudpickle==3.1.1
-pyspark==4.0.0
+pyspark==3.5.1
