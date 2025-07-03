@@ -1,0 +1,5 @@
+DB_USER=admin
+DB_PASS=password
+DB_HOST=localhost
+DB_PORT=5443
+DB_NAME=domain_model_db
