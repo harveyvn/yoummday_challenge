@@ -32,12 +32,10 @@ def read_json_from_minio_with_spark(bucket_name: str, s3_path: str):
         log.info(f"Successfully read data from {s3a_path}")
         df.printSchema()
         df.show()
-        return df
+        return df, spark
     except Exception as e:
         log.error(f"Error reading JSON from MinIO: {e}")
         raise
-    finally:
-        spark.stop()
 
 
 def read_json_from_local(local_json_path: str):
@@ -64,9 +62,7 @@ def read_json_from_local(local_json_path: str):
         log.info(f"Successfully read data from {local_json_path}")
         df.printSchema()
         df.show()
-        return df
+        return df, spark
     except Exception as e:
         log.error(f"Error reading local JSON file: {e}")
         raise
-    finally:
-        spark.stop()
