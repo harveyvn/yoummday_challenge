@@ -20,5 +20,5 @@ with DAG(
 ) as dag:
     run_spark_job = BashOperator(
         task_id='upload_job',
-        bash_command='docker exec listen_brainz_spark_master spark-submit /opt/bitnami/spark/app/upload.py',
+        bash_command='docker exec -it listen_brainz_spark_master bash -c "PYTHONPATH=/opt/bitnami/spark spark-submit /opt/bitnami/spark/app/upload.py"',
     )
