@@ -24,6 +24,7 @@ build-airflow:
 	sleep 10
 	@echo "Starting airflow_webserver..."
 	cd module_airflow && docker-compose up -d && cd ..
+	sleep 10
 
 start: create-network build-all-modules build-airflow
 	@echo "All modules started."
