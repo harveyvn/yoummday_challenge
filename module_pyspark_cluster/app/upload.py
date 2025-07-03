@@ -1,8 +1,8 @@
 import os
 from minio import Minio
-from utils.logging import log
+from app.utils.logging import log
 from datetime import datetime
-from models.spark_s3 import SparkS3
+from app.models.spark_s3 import SparkS3
 
 
 def upload_json_to_minio_with_spark(local_json_path: str, bucket_name: str, object_name: str):

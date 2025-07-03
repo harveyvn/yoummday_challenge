@@ -1,8 +1,7 @@
 import os
 from pyspark.sql import SparkSession
-from utils.logging import log
-from datetime import datetime
-from models.spark_s3 import SparkS3
+from app.utils.logging import log
+from app.models.spark_s3 import SparkS3
 
 
 def read_json_from_minio_with_spark(bucket_name: str, s3_path: str):
@@ -71,14 +70,3 @@ def read_json_from_local(local_json_path: str):
         raise
     finally:
         spark.stop()
-
-
-if __name__ == "__main__":
-    bucket = "datalake"
-    s3_url = f"raw/{datetime.today().strftime('%Y%m%d')}/dataset.json"
-
-    env = os.getenv("ENV", "LOCAL")
-    if env == "PRD":
-        df_read = read_json_from_minio_with_spark(bucket, s3_url)
-    else:
-        df_read = read_json_from_local("static_files/dataset.json")
