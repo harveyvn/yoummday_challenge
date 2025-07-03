@@ -1,3 +1,0 @@
-POSTGRES_DB=listen_metabase_db
-POSTGRES_USER=metabase
-POSTGRES_PASSWORD=metabase_pw

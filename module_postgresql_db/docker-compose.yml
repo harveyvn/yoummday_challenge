@@ -5,18 +5,18 @@ networks:
     external: true
 
 services:
-  db:
+  db_metabase:
     image: postgres:15
-    container_name: listen_brainz_db_container
+    container_name: listen_brainz_db_metabase_container
 
     ports:
       - "5442:5432"
 
     env_file:
-      - .encrypted_env
+      - .encrypted_metabase_env
 
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_metabase_data:/var/lib/postgresql/data
 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d listen_db"]
@@ -30,6 +30,60 @@ services:
     networks:
       - harvey-cloud
 
+  db_dm:
+    image: postgres:15
+    container_name: listen_brainz_db_dm_container
+
+    ports:
+      - "5443:5432"
+
+    env_file:
+      - .encrypted_dm_env
+
+    volumes:
+      - db_dm_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d listen_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+    restart: unless-stopped
+
+    networks:
+      - harvey-cloud
+
+  db_analytic:
+    image: postgres:15
+    container_name: listen_brainz_db_analytic_container
+
+    ports:
+      - "5444:5432"
+
+    env_file:
+      - .encrypted_analytic_env
+
+    volumes:
+      - db_analytic_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d listen_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+    restart: unless-stopped
+
+    networks:
+      - harvey-cloud
+
 volumes:
-  db_data:
+  db_metabase_data:
+    driver: local
+  db_dm_data:
+    driver: local
+  db_analytic_data:
     driver: local
