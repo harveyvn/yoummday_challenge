@@ -10,7 +10,7 @@ services:
     container_name: listen_brainz_metabase_container
 
     ports:
-      - "3000:3000"
+      - "8088:3000"
 
     env_file:
       - .encrypted_env
