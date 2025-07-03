@@ -18,7 +18,7 @@ services:
       - .encrypted_env
 
     ports:
-      - '8088:8080'
+      - '8089:8080'
       - '7077:7077'
 
     networks:
