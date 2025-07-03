@@ -36,6 +36,7 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - postgres
     networks:
@@ -53,6 +54,7 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - airflow-init
       - postgres
@@ -72,6 +74,7 @@ services:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
       - ./plugins:/opt/airflow/plugins
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - airflow-init
       - postgres
