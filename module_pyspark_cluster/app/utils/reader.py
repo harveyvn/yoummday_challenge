@@ -30,8 +30,8 @@ def read_json_from_minio_with_spark(bucket_name: str, s3_path: str):
         # For multi-line JSON files, you might need to add .option("multiLine", "true")
         df = spark.read.json(s3a_path)
         log.info(f"Successfully read data from {s3a_path}")
-        df.printSchema()
-        df.show()
+        # df.printSchema()
+        # df.show()
         return df, spark
     except Exception as e:
         log.error(f"Error reading JSON from MinIO: {e}")
@@ -60,8 +60,8 @@ def read_json_from_local(local_json_path: str):
     try:
         df = spark.read.json(local_json_path)
         log.info(f"Successfully read data from {local_json_path}")
-        df.printSchema()
-        df.show()
+        # df.printSchema()
+        # df.show()
         return df, spark
     except Exception as e:
         log.error(f"Error reading local JSON file: {e}")
