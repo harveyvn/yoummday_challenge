@@ -1,12 +1,10 @@
 import os
 from dotenv import load_dotenv
 
-from module_migration_dm.src.utils.logging import log
-
-load_dotenv(dotenv_path=".encrypted_dm_env")
-
-log.info(f'Current working directory: {os.getcwd()}')
-log.info(f'Existed Encrypted DM Env File: {os.path.exists(".encrypted_dm_env")}')
+if os.path.exists(".encrypted_dm_env") is False:
+    load_dotenv(dotenv_path="src/.encrypted_dm_env")
+else:
+    load_dotenv(dotenv_path=".encrypted_dm_env")
 
 DB_USER = os.getenv("DB_USER")
 DB_PASS = os.getenv("DB_PASS")
