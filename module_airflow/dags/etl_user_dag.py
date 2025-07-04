@@ -9,6 +9,14 @@ default_args = {
     'email_on_retry': False
 }
 
+
+def create_bash_operator(task_id) -> BashOperator:
+    return BashOperator(
+        task_id=task_id,
+        bash_command='docker exec listen_brainz_spark_master bash -c "PYTHONPATH=/opt/bitnami/spark spark-submit /opt/bitnami/spark/app/pipeline_user.py"',
+    )
+
+
 with DAG(
     dag_id='etl_user_job',
     default_args=default_args,
@@ -18,7 +26,4 @@ with DAG(
     catchup=False,
     tags=['etl', 'user'],
 ) as dag:
-    run_spark_job = BashOperator(
-        task_id='etl_user_job',
-        bash_command='docker exec listen_brainz_spark_master bash -c "PYTHONPATH=/opt/bitnami/spark spark-submit /opt/bitnami/spark/app/pipeline_user.py"',
-    )
+    run_spark_job = create_bash_operator(task_id='etl_user_job')
