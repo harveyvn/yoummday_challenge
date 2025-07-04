@@ -26,12 +26,16 @@ build-airflow:
 	cd module_airflow && docker-compose up -d && cd ..
 	sleep 10
 
-start: create-network build-all-modules build-airflow
+migrate-dm:
+	@echo "Starting module_migration_dm..."
+	cd module_migration_dm && docker-compose up -d
+
+start: create-network build-all-modules build-airflow migrate-dm
 	@echo "All modules started."
 
 # Optional cleanup
 clean:
-	@for module in $(MODULES) module_airflow; do \
+	@for module in $(MODULES) module_airflow module_migration_dm; do \
 		echo "Stopping $$module..."; \
 		cd $$module && docker-compose down && cd ..; \
 	done
