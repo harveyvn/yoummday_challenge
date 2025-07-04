@@ -25,7 +25,7 @@ class Track:
         df_tracks = df_tracks.withColumn("id", col("recording_msid"))
         df_tracks = df_tracks.withColumn("last_updated", current_timestamp())
         df_tracks = df_tracks.dropDuplicates(["id"])
-        df_tracks = df_tracks.select("id", "track_name", "artist_name", "release_name", "recording_msid", "artist_msid", "release_msid")
+        df_tracks = df_tracks.select("id", "track_name", "artist_name", "release_name", "recording_msid", "artist_msid", "release_msid", "last_updated")
         self._df_tracks = df_tracks
 
     def _write_transform_to_s3(self):
