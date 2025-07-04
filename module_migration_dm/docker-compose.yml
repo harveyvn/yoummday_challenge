@@ -1,0 +1,18 @@
+version: '3.8'
+
+networks:
+  harvey-cloud:
+    external: true
+
+services:
+  migration:
+    build: .
+    container_name: listen_brainz_migration_dm_container
+
+    env_file:
+      - .encrypted_env
+
+    networks:
+      - harvey-cloud
+
+#    tty: true  # keep container live
