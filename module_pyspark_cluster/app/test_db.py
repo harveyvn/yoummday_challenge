@@ -25,10 +25,10 @@ if __name__ == '__main__':
         )
 
         df_test.show()
-        print("✅ Connection test successful.")
+        print("Connection test successful.")
 
     except Exception as e:
-        print("❌ Connection test failed.")
+        print("Connection test failed.")
         print(f"Error: {e}")
 
     spark.stop()
