@@ -1,0 +1,12 @@
+app:
+  outputs:
+    dev:
+      threads: 1
+      type: postgres
+      host: "{{ env_var('DB_HOST', 'localhost') }}"
+      user: "{{ env_var('DB_USER', 'admin') }}"
+      pass: "{{ env_var('DB_PASSWORD', 'password') }}"
+      port: "{{ env_var('DB_PORT', 5444) }}"
+      dbname: "{{ env_var('DB_DBNAME', 'analytic_db') }}"
+      schema: "{{ env_var('DB_SCHEMA', 'public') }}"
+  target: dev
