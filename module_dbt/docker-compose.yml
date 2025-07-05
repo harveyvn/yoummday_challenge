@@ -1,0 +1,21 @@
+#version: '3.8'
+
+networks:
+  harvey-cloud:
+    external: true
+
+services:
+  dbt-service:
+    build: .
+    container_name: listen_brainz_dbt_container
+
+    volumes:
+      - ./app/:/opt/app/
+
+    env_file:
+      - .encrypted_dbt_env
+
+#    tty: true
+
+    networks:
+      - harvey-cloud
