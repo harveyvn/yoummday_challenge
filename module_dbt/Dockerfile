@@ -9,4 +9,4 @@ RUN pip install -r requirements.txt
 COPY app/ /opt/app/
 WORKDIR /opt/app
 
-CMD ["dbt", "debug", "--profiles-dir", "profiles"]
+#CMD ["dbt", "debug", "--profiles-dir", "profiles"]
