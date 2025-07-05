@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: public
+    tables:
+      - name: listens
+      - name: users
+      - name: tracks

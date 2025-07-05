@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: top3_listening_days
+    description: Top 3 days per user with the highest number of listens
+    columns:
+      - name: user_id
+        tests:
+          - not_null
+          - relationships:
+              to: source('public', 'users')
+              field: id
+      - name: user_name
+        tests:
+          - not_null
+      - name: number_of_listens
+        tests:
+          - not_null
+      - name: date
+        tests:
+          - not_null
+
+  - name: first_song_each_user_listen
+    description: The first track user listen to
+    columns:
+      - name: user_name
+        tests:
+          - not_null
+          - relationships:
+              to: source('public', 'users')
+              field: user_name
+      - name: track_name
+        tests:
+          - not_null
+          - relationships:
+              to: source('public', 'tracks')
+              field: track_name
+      - name: artist_name
+        tests:
+          - not_null
+      - name: listened_at
+        tests:
+          - not_null
+
+  - name: active_users_daily
+    description: Daily active user count and percentage of active users in 1 week
+    columns:
+      - name: date
+        tests:
+          - not_null
+          - unique
+      - name: number_active_users
+        tests:
+          - not_null
+      - name: percentage_active_users
+        tests:
+          - not_null
