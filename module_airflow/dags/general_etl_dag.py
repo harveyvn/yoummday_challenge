@@ -7,6 +7,7 @@ import etl_user_dag
 import etl_track_dag
 import etl_listen_dag
 import dbt_analytic_dag
+import dbt_test_dag
 
 default_args = {
     'owner': 'airflow',
@@ -29,10 +30,12 @@ with DAG(
     etl_track_job = etl_track_dag.create_bash_operator(task_id='etl_track_job')
     etl_listen_job = etl_listen_dag.create_bash_operator(task_id='etl_listen_job')
     dbt_analytic_job = dbt_analytic_dag.create_bash_operator(task_id='dbt_analytic_job')
+    dbt_test_job = dbt_test_dag.create_bash_operator(task_id='dbt_test_job')
     chain(
         ingestion_job,
         etl_user_job,
         etl_track_job,
         etl_listen_job,
-        dbt_analytic_job
+        dbt_analytic_job,
+        dbt_test_job
     )
