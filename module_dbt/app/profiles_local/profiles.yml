@@ -6,7 +6,7 @@ app:
       host: "{{ env_var('DB_HOST', 'localhost') }}"
       user: "{{ env_var('DB_USER', 'admin') }}"
       pass: "{{ env_var('DB_PASSWORD', 'password') }}"
-      port: 5432
+      port: 5443
       dbname: "{{ env_var('DB_DBNAME', 'domain_model_db') }}"
       schema: "{{ env_var('DB_SCHEMA', 'analytic') }}"
   target: dev

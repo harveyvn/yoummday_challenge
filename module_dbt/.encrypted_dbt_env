@@ -1,6 +1,6 @@
 DB_USER=admin
 DB_PASS=password
-DB_HOST=listen_brainz_db_analytic_container
+DB_HOST=listen_brainz_db_dm_container
 DB_PORT=5432
-DB_NAME=analytic_db
-DB_SCHEMA=public
+DB_NAME=domain_model_db
+DB_SCHEMA=analytic
