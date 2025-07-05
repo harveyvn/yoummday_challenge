@@ -13,7 +13,7 @@ default_args = {
 def create_bash_operator(task_id) -> BashOperator:
     return BashOperator(
         task_id=task_id,
-        bash_command='docker exec -it listen_brainz_dbt_container dbt test --profiles-dir profiles',
+        bash_command='docker exec listen_brainz_dbt_container dbt test --profiles-dir profiles',
     )
 
 
