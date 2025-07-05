@@ -10,7 +10,7 @@ create-network:
 		echo "Docker network '$(NETWORK_NAME)' already exists."; \
 	fi
 
-MODULES = module_postgresql_db module_metabase module_local_s3 module_pyspark_cluster
+MODULES = module_postgresql_db module_metabase module_local_s3 module_pyspark_cluster module_dbt
 build-all-modules:
 	@for module in $(MODULES); do \
 		echo "Starting $$module..."; \
