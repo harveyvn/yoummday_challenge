@@ -10,6 +10,6 @@ def get_data(bucket_name: str, s3_path: str) -> Tuple[DataFrame, SparkSession]:
     if env == "PRD":
         df_read, spark = read_json_from_minio_with_spark(bucket_name, s3_path)
     else:
-        df_read, spark = read_json_from_local("static_files/dataset.json")
+        df_read, spark = read_json_from_local("static_files/dataset.txt")
 
     return df_read, spark

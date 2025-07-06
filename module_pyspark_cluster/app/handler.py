@@ -30,8 +30,8 @@ def upload_file_to_minio(local_file_path, bucket_name, object_name):
 
 
 if __name__ == "__main__":
-    local_file = "static_files/dataset.json"  # adjust path to your static file
+    local_file = "static_files/dataset.txt"  # adjust path to your static file
     bucket = "ingestion-bucket"
-    object_name = "dataset.json"  # name inside the bucket
+    object_name = "dataset.txt"  # name inside the bucket
 
     upload_file_to_minio(local_file, bucket, object_name)

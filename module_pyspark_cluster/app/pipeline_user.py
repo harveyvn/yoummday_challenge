@@ -65,6 +65,6 @@ class User:
 
 
 if __name__ == '__main__':
-    s3_url = f"raw/{datetime.today().strftime('%Y%m%d')}/dataset.json"
+    s3_url = f"raw/{datetime.today().strftime('%Y%m%d')}/dataset.txt"
     user_pipeline = User(BUCKET_NAME, s3_url)
     user_pipeline.run()

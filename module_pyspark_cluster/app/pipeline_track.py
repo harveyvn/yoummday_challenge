@@ -94,6 +94,6 @@ class Track:
 
 
 if __name__ == '__main__':
-    s3_url = f"raw/{datetime.today().strftime('%Y%m%d')}/dataset.json"
+    s3_url = f"raw/{datetime.today().strftime('%Y%m%d')}/dataset.txt"
     track_pipeline = Track(BUCKET_NAME, s3_url)
     track_pipeline.run()

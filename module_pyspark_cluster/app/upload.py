@@ -36,8 +36,8 @@ def upload_json_to_minio_with_spark(local_json_path: str, bucket_name: str, obje
 
 
 if __name__ == "__main__":
-    local_file = "static_files/dataset.json"
+    local_file = "static_files/dataset.txt"
     bucket = "datalake"
-    object_name = f"raw/{datetime.today().strftime('%Y%m%d')}/dataset.json"
+    object_name = f"raw/{datetime.today().strftime('%Y%m%d')}/dataset.txt"
 
     upload_json_to_minio_with_spark(local_file, bucket, object_name)
