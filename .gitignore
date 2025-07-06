@@ -54,3 +54,6 @@ venv
 *.csv
 *.xlsx
 *.pickle
+logs/
+.gitkeep
+.user.yml
