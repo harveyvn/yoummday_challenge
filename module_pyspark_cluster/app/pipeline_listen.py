@@ -12,6 +12,7 @@ class Listen:
     def __init__(self, bucket_name: str, s3_path: str):
         self._df, self._spark = get_data(bucket_name, s3_path)
         self._df = self._df.toDF("user_name", "listened_at", "musicbrainz-artist-id", "artist-name", "musicbrainz-track-id", "track-name")
+        self._df = self._df.limit(300000)
         self._s3_transform_path: str = f"s3a://{bucket_name}/transformed/{datetime.today().strftime('%Y%m%d')}/listens/"
         self._df_listens: DataFrame = None
 
