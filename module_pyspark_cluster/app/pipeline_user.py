@@ -1,6 +1,6 @@
 from datetime import datetime
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col, udf, current_timestamp
+from pyspark.sql.functions import col, udf, current_timestamp, to_date
 from pyspark.sql.types import StringType
 from app.const import ENV, BUCKET_NAME
 from app.utils.common import get_data
@@ -11,6 +11,8 @@ from app.utils.sql_utils import insert_on_conflict_do_update
 class User:
     def __init__(self, bucket_name: str, s3_path: str):
         self._df, self._spark = get_data(bucket_name, s3_path)
+        self._df = self._df.toDF("user_name", "gender", "age", "country", "registered")
+        self._df = self._df.rdd.zipWithIndex().filter(lambda row_index: row_index[1] > 0).map(lambda row_index: row_index[0]).toDF(self._df.schema)
         self._s3_transform_path: str = f"s3a://{bucket_name}/transformed/{datetime.today().strftime('%Y%m%d')}/users/"
         self._df_users: DataFrame = None
 
@@ -20,11 +22,20 @@ class User:
         return str(uuid.uuid5(uuid.NAMESPACE_URL, text))
 
     def _transform(self):
+        self._df.show(2)
         uuid_udf = udf(self._generate_uuid, StringType())
-        df_users = self._df.select("user_name").distinct()
+        df_users = self._df.select(
+            col("user_name").alias("user_name"),
+            col("gender").alias("gender"),
+            col("age").alias("age"),
+            col("country").alias("country"),
+            col("registered").alias("registered"),
+        )
         df_users = df_users.withColumn("id", uuid_udf(col("user_name")))
+        df_users = df_users.withColumn("registered", to_date("registered", "MMM d, yyyy"))
         df_users = df_users.withColumn("last_updated", current_timestamp())
-        df_users = df_users.select("id", "user_name", "last_updated")
+        df_users = df_users.select("id", "user_name", "gender", "age", "country", "registered", "last_updated")
+        df_users.show(2)
         self._df_users = df_users
 
     def _write_transform_to_s3(self):
@@ -65,6 +76,6 @@ class User:
 
 
 if __name__ == '__main__':
-    s3_url = f"raw/{datetime.today().strftime('%Y%m%d')}/dataset.txt"
+    s3_url = f"raw/{datetime.today().strftime('%Y%m%d')}/userid-profile.tsv"
     user_pipeline = User(BUCKET_NAME, s3_url)
     user_pipeline.run()

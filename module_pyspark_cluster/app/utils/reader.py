@@ -28,7 +28,7 @@ def read_json_from_minio_with_spark(bucket_name: str, s3_path: str):
 
     try:
         # For multi-line JSON files, you might need to add .option("multiLine", "true")
-        df = spark.read.json(s3a_path)
+        df = spark.read.parquet(s3a_path)
         log.info(f"Successfully read data from {s3a_path}")
         # df.printSchema()
         # df.show()
@@ -58,7 +58,7 @@ def read_json_from_local(local_json_path: str):
     log.info(f"Attempting to read local JSON file: {local_json_path}")
 
     try:
-        df = spark.read.json(local_json_path)
+        df = spark.read.parquet(local_json_path)
         log.info(f"Successfully read data from {local_json_path}")
         # df.printSchema()
         # df.show()
