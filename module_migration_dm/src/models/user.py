@@ -16,6 +16,3 @@ class User(Base):
 
     date_created = Column(DateTime(timezone=False), server_default=func.now())
     last_updated = Column(TIMESTAMP, server_default=func.now(), onupdate=func.current_timestamp())
-
-    def __repr__(self):
-        return f"<User(id={self.id}, user_name='{self.user_name}')>"
