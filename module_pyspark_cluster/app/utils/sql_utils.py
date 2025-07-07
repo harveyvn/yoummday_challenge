@@ -7,6 +7,9 @@ import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
+from pyspark.sql import Row
+from itertools import islice
+
 ENV = os.getenv('ENV', 'LOCAL').upper()
 DB_USER = os.getenv('DB_USER', 'admin')
 DB_PASS = os.getenv('DB_PASS', 'password')
@@ -122,3 +125,27 @@ def chunks(list_obj, batch_size):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(list_obj), batch_size):
         yield list_obj[i:i + batch_size]
+
+
+def insert_spark_df_in_chunks(spark_df, table_name, check_cols, batch_size=10):
+    def chunked_iterator(iterator, batch_size):
+        """Yield successive chunks from an iterator."""
+        while True:
+            chunk = list(islice(iterator, batch_size))
+            if not chunk:
+                break
+            yield chunk
+
+    total_inserted = 0
+
+    # Get local iterator over the Spark DataFrame rows
+    row_iterator = spark_df.toLocalIterator()
+
+    for chunk in chunked_iterator(row_iterator, batch_size):
+        # Convert chunk (list of Rows) to Pandas DataFrame
+        pandas_df = pd.DataFrame([row.asDict() for row in chunk])
+
+        # Insert into DB
+        insert_on_conflict_do_update(df=pandas_df, check_cols=check_cols, table_name=table_name, batch=batch_size)
+
+        total_inserted += len(pandas_df)
