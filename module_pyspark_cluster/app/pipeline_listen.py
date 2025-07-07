@@ -1,16 +1,17 @@
 from datetime import datetime
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col, udf, current_timestamp, concat_ws, from_unixtime, to_timestamp, to_date
+from pyspark.sql.functions import col, udf, current_timestamp, concat_ws, to_date
 from pyspark.sql.types import StringType
 from app.const import ENV, BUCKET_NAME
 from app.utils.common import get_data
 from app.utils.logging import log
-from app.utils.sql_utils import insert_on_conflict_do_update
+from app.utils.sql_utils import insert_spark_df_in_chunks
 
 
 class Listen:
     def __init__(self, bucket_name: str, s3_path: str):
         self._df, self._spark = get_data(bucket_name, s3_path)
+        self._df = self._df.toDF("user_name", "listened_at", "musicbrainz-artist-id", "artist-name", "musicbrainz-track-id", "track-name")
         self._s3_transform_path: str = f"s3a://{bucket_name}/transformed/{datetime.today().strftime('%Y%m%d')}/listens/"
         self._df_listens: DataFrame = None
 
@@ -20,18 +21,23 @@ class Listen:
         return str(uuid.uuid5(uuid.NAMESPACE_URL, text))
 
     def _transform(self):
+        self._df.show(2)
         df_listens = self._df.select(
             col("user_name").alias("user_name"),
-            col("recording_msid").alias("track_id"),
-            col("listened_at").alias("listened_unix_timestamp"),
+            col("musicbrainz-track-id").alias("track_id"),
+            col("listened_at").alias("listened_at"),
         )
         uuid_udf = udf(self._generate_uuid, StringType())
-        df_listens = df_listens.withColumn("id", uuid_udf(concat_ws(" ", col("user_name"), col("track_id"), col("listened_unix_timestamp"))))
+        df_listens = df_listens.withColumn("id", uuid_udf(concat_ws(" ", col("user_name"), col("track_id"), col("listened_at"))))
         df_listens = df_listens.withColumn("user_id", uuid_udf(col("user_name")))
-        df_listens = df_listens.withColumn("listened_at", to_timestamp(from_unixtime(col("listened_unix_timestamp"))))
         df_listens = df_listens.withColumn("date", to_date(col("listened_at")))
         df_listens = df_listens.withColumn("last_updated", current_timestamp())
         df_listens = df_listens.select("id", "user_id", "track_id", "listened_at", "date", "last_updated")
+        df_listens.show(2)
+        df_listens = df_listens.dropDuplicates(["id"])
+        df_listens = df_listens.filter(col("track_id").isNotNull())
+        df_listens = df_listens.filter(col("listened_at").isNotNull())
+        df_listens.show(2)
         self._df_listens = df_listens
 
     def _write_transform_to_s3(self):
@@ -39,9 +45,8 @@ class Listen:
         log.info(f'Upload transformed data to S3 Path: {self._s3_transform_path}')
 
     def _load(self):
-        df = self._df_listens.toPandas()
-        insert_on_conflict_do_update(df=df, table_name="listens", batch=5000)
-        log.info(f'Inserted {len(df)} listens to db')
+        insert_spark_df_in_chunks(spark_df=self._df_listens, table_name="listens", check_cols=None, batch_size=500000)
+        log.info(f'Inserted {self._df_listens.count()} listens to db')
 
     def _validate_data(self):
         log.info("Running data quality checks for listens...")
@@ -110,6 +115,6 @@ class Listen:
 
 
 if __name__ == '__main__':
-    s3_url = f"raw/{datetime.today().strftime('%Y%m%d')}/dataset.txt"
+    s3_url = f"raw/{datetime.today().strftime('%Y%m%d')}/userid-timestamp-artid-artname-traid-traname.tsv"
     track_pipeline = Listen(BUCKET_NAME, s3_url)
     track_pipeline.run()
