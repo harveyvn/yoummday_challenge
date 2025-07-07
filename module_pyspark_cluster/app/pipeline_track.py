@@ -4,7 +4,7 @@ from pyspark.sql.functions import col, current_timestamp
 from app.const import ENV, BUCKET_NAME
 from app.utils.common import get_data
 from app.utils.logging import log
-from app.utils.sql_utils import insert_on_conflict_do_update
+from app.utils.sql_utils import insert_spark_df_in_chunks
 
 
 class Track:
@@ -36,7 +36,7 @@ class Track:
 
     def _load(self):
         df = self._df_tracks.toPandas()
-        insert_on_conflict_do_update(df=df, table_name="tracks", check_cols=["id"], batch=200000)
+        insert_spark_df_in_chunks(spark_df=self._df_tracks, table_name="tracks", check_cols=["id"], batch_size=20000)
         log.info(f'Inserted {len(df)} tracks to db')
 
     def _validate_data(self):
