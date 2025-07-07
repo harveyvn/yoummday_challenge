@@ -1,4 +1,4 @@
-select l.user_id, u.user_name, l.track_id, t.track_name, t.artist_name, t.release_name, l.listened_at
+select l.user_id, u.user_name, l.track_id, t.track_name, t.artist_name, l.listened_at
 from {{ source('public', 'listens') }} l
 join (
 	select l.user_id, min(l.listened_at)
