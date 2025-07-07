@@ -18,6 +18,12 @@ class SparkS3:
 		hadoop_conf.set("fs.s3a.path.style.access", "true")
 		hadoop_conf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
 		hadoop_conf.set("fs.s3a.connection.ssl.enabled", "false")
+
+		hadoop_conf.set("fs.s3a.committer.name", "directory")
+		hadoop_conf.set("mapreduce.fileoutputcommitter.algorithm.version", "2")
+		hadoop_conf.set("fs.s3a.committer.staging.conflict-mode", "replace")
+		hadoop_conf.set("fs.s3a.committer.staging.abort.pending.uploads", "true")
+		hadoop_conf.set("fs.s3a.fast.upload", "true")
 		return spark
 
 	def get_spark(self) -> SparkSession:
