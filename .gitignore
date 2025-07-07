@@ -58,4 +58,5 @@ logs/
 .gitkeep
 .user.yml
 dataset.*
+lastfm-dataset*
 
