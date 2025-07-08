@@ -1,7 +1,7 @@
 # ETL Project with PySpark & Airflow
 
 ## Pipeline Overview
-![image info](./assets/pipeline_overview.jpg)
+![image info](./assets/pipeline_overview.png)
 
 ## Build Instructions
 1. Go to [MusicRecommendationDataset](http://ocelma.net/MusicRecommendationDataset/lastfm-1K.html) to download the dataset.
