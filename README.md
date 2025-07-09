@@ -20,19 +20,19 @@ used to connect to the database.
 All you need are the credentials below to access the database
 from the host.
 
-• Database Type: PostgreSQL
+- Database Type: PostgreSQL
 
-• Display Name: Domain Model
+- Display Name: Domain Model
 
-• Host: listen_brainz_db_dm_container
+- Host: listen_brainz_db_dm_container
 
-• Port: 5443
+- Port: 5443
 
-• Database Name: domain_model_db
+- Database Name: domain_model_db
 
-• Username: admin
+- Username: admin
 
-• Password: password
+- Password: password
 
 ---
 
