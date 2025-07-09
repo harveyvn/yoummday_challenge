@@ -12,6 +12,27 @@
 ```bash
    make start
 ````
+---
+
+## Setup Database Visualization
+This step is optional since any database management tool (e.g., DBeaver, TablePlus) can be
+used to connect to the database. 
+All you need are the credentials below to access the database
+from the host.
+
+• Database Type: PostgreSQL
+
+• Display Name: Domain Model
+
+• Host: listen_brainz_db_dm_container
+
+• Port: 5443
+
+• Database Name: domain_model_db
+
+• Username: admin
+
+• Password: password
 
 ---
 
